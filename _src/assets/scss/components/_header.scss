@@ -1,0 +1,22 @@
+.header__title {
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 400;
+}
+
+.searcher__button {
+  background-color: #792B56;
+  border: 0;
+  border-radius: 2px;
+  color: $color-white;
+  margin-left: 10px;
+}
+
+.header__searcher-container {
+  display: flex;
+  justify-content: center;
+}
+
+
+
+
