@@ -22,21 +22,28 @@ function writeShow() {
         let nameShow = data[i].show.name;
         let imageShow = data[i].show.image;
         let idShow = data[i].show.id;
-        console.log(idShow);
         const placeholder = 'https://via.placeholder.com/210x295/cccccc/666666/?text=TV';
-        // convertir JSON a objeto(array) y leer favoritos del local storage
-        const favorites = JSON.parse(localStorage.getItem('favorites'));
 
-        // comprobar si el id del show está en favoritos
-        let isFavorite = favorites.findIndex(x => x === idShow.toString()) !== -1;
+        //PASO 3: convertir JSON a objeto(array) y leer favoritos del local storage
+        const favoritesLocalStorage = JSON.parse(localStorage.getItem('favorites'));
 
-        // Si está en favoritos le pone la clase favorite, sino le pone una cadena vacía. Operador ternario: condicion boolean ? true : false
-        let favoriteCssClass = isFavorite ? favoriteClass : '';
+        // si no hay nada en el localStorage añadir favoriteCssClass vacío
+        let favoriteClass = '';
+        //si existe el localStorage y no es null
+        if(favoritesLocalStorage !== null) {
+          // actualizar lista de favoritos guardados con los datos del localstorage, para no perderlos cuando se recarga la página o se cambia de búsqueda:
+          savedFavorites = favoritesLocalStorage;
 
-        // Por cada show contenido en el resultado de búsqueda debemos pintar en el ul una li de una tarjeta donde mostramos una imagen de la serie (img) y el título(h2). Si las series que obtenemos en los resultados no tienen cartel, debemos mostrar una imagen de relleno: https://via.placeholder.com/210x295/cccccc/666666/?text=TV
+          // comprobar si el id del show está en favoritos
+          let isFavorite = favoritesLocalStorage.findIndex(x => x === idShow.toString()) !== -1;
+          // Si está en favoritos le pone la clase favorite, sino le pone una cadena vacía. Operador ternario: condicion boolean ? true : false
+          favoriteClass = isFavorite ? favoriteClass : '';
+        }
+
+        // Por cada show contenido en el resultado de búsqueda mostrar una imagen de la serie y el título. Si las series que obtenemos en los resultados no tienen cartel, debemos mostrar una imagen de relleno
         if (imageShow === null) {
           listContainer.innerHTML += `
-          <li class="show ${favoriteCssClass}" id="${idShow}">
+          <li class="show ${favoriteClass}" id="${idShow}">
           <div class="img-container">
             <img class="img-show" src=${placeholder} alt="${nameShow}">
           </div>
@@ -45,7 +52,7 @@ function writeShow() {
           `;
         } else {
           listContainer.innerHTML += `
-          <li class="show ${favoriteCssClass}" id="${idShow}">
+          <li class="show ${favoriteClass}" id="${idShow}">
           <div class="img-container">
             <img class="img-show" src="${imageShow.medium}" alt="${nameShow}">
           </div>
@@ -65,20 +72,19 @@ function writeShow() {
 button.addEventListener('click', writeShow);
 
 
-// Marcar como favorito al hacer click en los resultados de búsqueda. Añadir una clase para que se cambia el color de fondo y se pone un borde alrededor de la tarjeta.
-
+// Marcar como favorito al hacer click en los resultados de búsqueda
 function markFavorite(e) {
   const item = e.currentTarget;
   item.classList.toggle(favoriteClass);
-  // Si tiene la clase favorite
+  // PASO 1 localStorage: Si tiene la clase favorite
   if(item.classList.contains(favoriteClass)){
     //añadir favorito a la array cuando se selecciona
     savedFavorites.push(item.id);
   } else {
     //sino eliminar favorito de la array al ser deseleccionado
-    let index = savedFavorites.findIndex(x => x === item.id);
-    savedFavorites.splice(index,1);
+    let indexArray = savedFavorites.findIndex(x => x === item.id);
+    savedFavorites.splice(indexArray,1);
   }
-  // almacenar favoritos en el localStorage y convertirlo a JSON
+  //PASO 2: almacenar favoritos en el localStorage y convertirlo a JSON
   localStorage.setItem('favorites', JSON.stringify(savedFavorites));
 }
