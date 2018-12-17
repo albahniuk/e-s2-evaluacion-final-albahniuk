@@ -10,6 +10,7 @@ const listContainer = document.querySelector('.main__container-list');
 
 // Al hacer clic sobre el botón de 'Buscar', nuestra aplicación debe conectarse al API:
 function writeShow() {
+  listContainer.innerHTML = '';
   // Recoger el texto que ha introducido el usuario en el campo de búsqueda.
   const show = inputUser.value;
   fetch(urlApi + show)
@@ -23,19 +24,19 @@ function writeShow() {
         if (imageShow === null) {
           listContainer.innerHTML += `
           <li class="show">
-          <h2 class="title-show">${nameShow}</h2>
           <div class="img-container">
             <img class="img-show" src=${placeholder} alt="${nameShow}">
           </div>
+          <h2 class="title-show">${nameShow}</h2>
           </li>
           `;
         } else {
           listContainer.innerHTML += `
           <li class="show">
-          <h2 class="title-show">${nameShow}</h2>
           <div class="img-container">
             <img class="img-show" src="${imageShow.medium}" alt="${nameShow}">
           </div>
+          <h2 class="title-show">${nameShow}</h2>
           </li>
           `;
         }
@@ -55,8 +56,18 @@ button.addEventListener('click', writeShow);
 
 function markFavorite(e) {
   const item = e.currentTarget;
-  console.log(item);
   item.classList.toggle('favorite');
+  // Almacenar la información de favoritos en el localStorage
+  savedFavorites.push(item.innerHTML);
+  console.log(savedFavorites);
+  // createStorage(savedFavorites.name, nameShow);
 }
 
-// Almacenar la información de favoritos en el localStorage.
+// Almacenar la información de favoritos en el localStorage
+let savedFavorites = [];
+
+
+
+
+// localStorage.setItem('savedFavorites', JSON.stringify(savedFavorites));
+
