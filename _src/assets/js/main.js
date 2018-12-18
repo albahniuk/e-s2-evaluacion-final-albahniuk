@@ -23,16 +23,16 @@ function writeShow() {
 
         //PASO 3: convertir JSON a objeto(array) y leer los favoritos del local storage
         const favoritesLocalStorage = JSON.parse(localStorage.getItem('favorites'));
-        console.log(favoritesLocalStorage);
         //Por defecto computedFavoriteClass está vacío
         let computedFavoriteClass = '';
         //Sin embargo, si existe el localStorage(no es null)
         if(favoritesLocalStorage !== null) {
           //actualizar lista de favoritos guardados con los datos del localstorage (para no perderlos cuando se recarga la página o se cambia de búsqueda):
           savedFavorites = favoritesLocalStorage;
-          //comprobar si el id de la serie está en favoritos y pasarlo a string (si el findIndex no encuentra nada devuelve -1)
+          console.log(savedFavorites);
+          //comprobar si el id de la serie está en favoritos (devuelve true/false) y pasarlo a string (si el findIndex no encuentra nada devuelve -1)
           let isFavorite = favoritesLocalStorage.findIndex(x => x === idShow.toString()) !== -1;
-          // //Si es favorita al li se le pone la clase favorite, sino se le pone una cadena vacía. Con operador ternario: condición boolean ? true : false
+          //Si es favorita al li se le pone la clase favorite, sino se le pone una cadena vacía. Con operador ternario: condición boolean ? true : false
           computedFavoriteClass = isFavorite ? favoriteClass : '';
         }
 
