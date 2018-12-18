@@ -7,10 +7,8 @@ const listContainer = document.querySelector('.main__container-list');
 const favoriteClass = 'favorite';
 let savedFavorites = [];
 
-// Al hacer clic sobre el botón de 'Buscar', nuestra aplicación debe conectarse al API:
 function writeShow() {
   listContainer.innerHTML = '';
-  // Recoger el texto que ha introducido el usuario en el campo de búsqueda.
   const show = inputUser.value;
   fetch(urlApi + show)
     .then(response => response.json())
@@ -21,22 +19,15 @@ function writeShow() {
         let idShow = data[i].show.id;
         const placeholder = 'https://via.placeholder.com/210x295/cccccc/666666/?text=TV';
 
-        //PASO 3: convertir JSON a objeto(array) y leer los favoritos del local storage
         const favoritesLocalStorage = JSON.parse(localStorage.getItem('favorites'));
-        //Por defecto computedFavoriteClass está vacío
+
         let computedFavoriteClass = '';
-        //Sin embargo, si existe el localStorage(no es null)
         if(favoritesLocalStorage !== null) {
-          //actualizar lista de favoritos guardados con los datos del localstorage (para no perderlos cuando se recarga la página o se cambia de búsqueda):
           savedFavorites = favoritesLocalStorage;
-          console.log(savedFavorites);
-          //comprobar si el id de la serie está en favoritos (devuelve true/false) y pasarlo a string (si el findIndex no encuentra nada devuelve -1)
           let isFavorite = favoritesLocalStorage.findIndex(x => x === idShow.toString()) !== -1;
-          //Si es favorita al li se le pone la clase favorite, sino se le pone una cadena vacía. Con operador ternario: condición boolean ? true : false
           computedFavoriteClass = isFavorite ? favoriteClass : '';
         }
 
-        // Por cada show contenido en el resultado de búsqueda mostrar una imagen de la serie y el título. Si las series que obtenemos en los resultados no tienen cartel, debemos mostrar una imagen de relleno
         const newItem = document.createElement('li');
         newItem.setAttribute('class', `show ${computedFavoriteClass}`);
         newItem.setAttribute('id', idShow);
@@ -68,20 +59,14 @@ function writeShow() {
 
 button.addEventListener('click', writeShow);
 
-
-// Marcar como favorito al hacer click en los resultados de búsqueda
 function markFavorite(e) {
   const item = e.currentTarget;
   item.classList.toggle(favoriteClass);
-  // PASO 1 localStorage: Si tiene la clase favorite
   if(item.classList.contains(favoriteClass)){
-    //añadir favorito a la array cuando se selecciona
     savedFavorites.push(item.id);
   } else {
-    //o eliminar favorito de la array al ser deseleccionado
     let indexArray = savedFavorites.indexOf(item.id);
     savedFavorites.splice(indexArray,1);
   }
-  //PASO 2: almacenar favoritos en el localStorage y convertirlo a JSON
   localStorage.setItem('favorites', JSON.stringify(savedFavorites));
 }
