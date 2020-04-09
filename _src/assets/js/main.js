@@ -1,6 +1,6 @@
 'use strict';
 
-const urlApi = 'http://api.tvmaze.com/search/shows?q=';
+const urlApi = 'https://api.tvmaze.com/search/shows?q=';
 const button = document.querySelector('.searcher__button');
 const inputUser = document.querySelector('.searcher__input');
 const listContainer = document.querySelector('.main__container-list');
